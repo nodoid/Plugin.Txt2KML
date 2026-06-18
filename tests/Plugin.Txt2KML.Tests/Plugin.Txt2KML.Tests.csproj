@@ -22,4 +22,11 @@
     <ProjectReference Include="..\..\src\Plugin.Txt2KML\Plugin.Txt2KML.csproj" />
   </ItemGroup>
 
+  <!-- Test the library against the actual sample files shipped with the sample app. -->
+  <ItemGroup>
+    <None Include="..\..\samples\Txt2KML.Sample\Resources\Raw\Samples\*.txt"
+          Link="SampleData\%(Filename)%(Extension)"
+          CopyToOutputDirectory="PreserveNewest" />
+  </ItemGroup>
+
 </Project>

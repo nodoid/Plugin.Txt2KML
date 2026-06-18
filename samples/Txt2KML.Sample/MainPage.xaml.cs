@@ -34,12 +34,14 @@ public partial class MainPage : ContentPage
 			ExportButton.IsEnabled = true;
 			StatusLabel.Text = $"Converted {waypoints.Count} waypoint(s).";
 		}
-		catch (FormatException ex)
+		catch (Txt2KmlFormatException ex)
 		{
 			OutputEditor.Text = string.Empty;
 			_lastResult = null;
 			ExportButton.IsEnabled = false;
-			StatusLabel.Text = ex.Message;
+			StatusLabel.Text = ex.LineNumber > 0
+				? $"Conversion failed at line {ex.LineNumber}: {ex.Message}"
+				: ex.Message;
 		}
 	}
 

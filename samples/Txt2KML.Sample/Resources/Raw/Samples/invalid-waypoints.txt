@@ -1,0 +1,5 @@
+# This file contains malformed data and is expected to FAIL conversion.
+# The third line has a non-numeric latitude.
+-12.4634,130.8456,Darwin
+notalatitude,151.2093,BadCity
+95.0,200.0,OutOfRange

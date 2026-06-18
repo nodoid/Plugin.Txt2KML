@@ -20,7 +20,7 @@ public static class Txt2Kml
     /// <summary>
     /// Parses delimited text into a list of <see cref="Waypoint"/>s.
     /// </summary>
-    /// <exception cref="FormatException">A non-comment line is malformed.</exception>
+    /// <exception cref="Txt2KmlFormatException">A non-comment line is malformed.</exception>
     public static IReadOnlyList<Waypoint> Parse(string? text)
     {
         var waypoints = new List<Waypoint>();
@@ -34,16 +34,19 @@ public static class Txt2Kml
             if (raw.Length == 0 || raw[0] == '#')
                 continue;
 
+            var lineNumber = i + 1;
             var fields = raw.Split(',');
             if (fields.Length < 2)
-                throw new FormatException(
-                    $"Line {i + 1}: expected at least 'latitude,longitude' but got '{raw}'.");
+                throw new Txt2KmlFormatException(lineNumber,
+                    $"Line {lineNumber}: expected at least 'latitude,longitude' but got '{raw}'.");
 
             if (!TryParseCoordinate(fields[0], out var lat) || lat is < -90 or > 90)
-                throw new FormatException($"Line {i + 1}: invalid latitude '{fields[0].Trim()}'.");
+                throw new Txt2KmlFormatException(lineNumber,
+                    $"Line {lineNumber}: invalid latitude '{fields[0].Trim()}'.");
 
             if (!TryParseCoordinate(fields[1], out var lon) || lon is < -180 or > 180)
-                throw new FormatException($"Line {i + 1}: invalid longitude '{fields[1].Trim()}'.");
+                throw new Txt2KmlFormatException(lineNumber,
+                    $"Line {lineNumber}: invalid longitude '{fields[1].Trim()}'.");
 
             var name = fields.Length > 2 ? Nullify(fields[2]) : null;
             var description = fields.Length > 3 ? Nullify(string.Join(",", fields[3..])) : null;
@@ -55,10 +58,54 @@ public static class Txt2Kml
     }
 
     /// <summary>
+    /// Attempts to parse delimited text without throwing.
+    /// </summary>
+    /// <returns><c>true</c> if every line parsed; otherwise <c>false</c> with <paramref name="error"/> set.</returns>
+    public static bool TryParse(
+        string? text,
+        out IReadOnlyList<Waypoint> waypoints,
+        out Txt2KmlFormatException? error)
+    {
+        try
+        {
+            waypoints = Parse(text);
+            error = null;
+            return true;
+        }
+        catch (Txt2KmlFormatException ex)
+        {
+            waypoints = Array.Empty<Waypoint>();
+            error = ex;
+            return false;
+        }
+    }
+
+    /// <summary>
     /// Parses delimited text and returns a complete KML document as a string.
     /// </summary>
+    /// <exception cref="Txt2KmlFormatException">A non-comment line is malformed.</exception>
     public static string Convert(string? text, string? documentName = null)
         => ToKml(Parse(text), documentName);
+
+    /// <summary>
+    /// Attempts to convert delimited text to KML without throwing.
+    /// </summary>
+    /// <returns><c>true</c> on success (with <paramref name="kml"/> set); otherwise <c>false</c> (with <paramref name="error"/> set).</returns>
+    public static bool TryConvert(
+        string? text,
+        out string? kml,
+        out Txt2KmlFormatException? error,
+        string? documentName = null)
+    {
+        if (TryParse(text, out var waypoints, out error))
+        {
+            kml = ToKml(waypoints, documentName);
+            return true;
+        }
+
+        kml = null;
+        return false;
+    }
 
     /// <summary>
     /// Builds a complete KML document from a set of waypoints.

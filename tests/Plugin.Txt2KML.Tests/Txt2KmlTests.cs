@@ -62,7 +62,10 @@ public class Txt2KmlTests
     [InlineData("-12.0")]        // missing longitude
     public void Parse_InvalidLine_Throws(string text)
     {
-        Assert.Throws<FormatException>(() => Txt2Kml.Parse(text));
+        // Txt2KmlFormatException derives from FormatException, so existing
+        // catch (FormatException) handlers continue to work.
+        var ex = Assert.Throws<Txt2KmlFormatException>(() => Txt2Kml.Parse(text));
+        Assert.IsAssignableFrom<FormatException>(ex);
     }
 
     [Fact]

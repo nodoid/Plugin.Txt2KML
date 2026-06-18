@@ -1,0 +1,8 @@
+# Australian capital cities
+# latitude,longitude,name,description
+-35.2809,149.1300,Canberra,National capital
+-33.8688,151.2093,Sydney,Largest city
+-37.8136,144.9631,Melbourne
+-27.4698,153.0251,Brisbane,Queensland capital
+-31.9523,115.8613,Perth
+-12.4634,130.8456,Darwin,Capital of the Northern Territory
