@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="Txt2KML.Sample.MainPage"
+             Title="Txt2KML Sample">
+
+    <Grid RowDefinitions="Auto,*,Auto,*,Auto"
+          ColumnDefinitions="*,*"
+          Padding="20"
+          RowSpacing="10"
+          ColumnSpacing="10">
+
+        <Label Grid.Row="0" Grid.ColumnSpan="2"
+               Text="Paste waypoints as latitude,longitude[,name][,description] — one per line."
+               Style="{StaticResource SubHeadline}" />
+
+        <Editor Grid.Row="1" Grid.ColumnSpan="2"
+                x:Name="InputEditor"
+                AutoSize="Disabled"
+                FontFamily="Consolas"
+                Placeholder="-12.4634,130.8456,Darwin,Capital of NT&#10;-37.8136,144.9631,Melbourne"
+                MinimumHeightRequest="160" />
+
+        <HorizontalStackLayout Grid.Row="2" Grid.ColumnSpan="2" Spacing="10">
+            <Button x:Name="ConvertButton"
+                    Text="Convert pasted text"
+                    Clicked="OnConvertClicked" />
+            <Button x:Name="LoadSampleButton"
+                    Text="Load sample"
+                    Clicked="OnLoadSampleClicked" />
+            <Button x:Name="PickFileButton"
+                    Text="Pick .txt file…"
+                    Clicked="OnPickFileClicked" />
+            <Button x:Name="ExportButton"
+                    Text="Export .kml…"
+                    IsEnabled="False"
+                    Clicked="OnExportClicked" />
+        </HorizontalStackLayout>
+
+        <Editor Grid.Row="3" Grid.ColumnSpan="2"
+                x:Name="OutputEditor"
+                AutoSize="Disabled"
+                FontFamily="Consolas"
+                IsReadOnly="True"
+                MinimumHeightRequest="200" />
+
+        <Label Grid.Row="4" Grid.ColumnSpan="2"
+               x:Name="StatusLabel"
+               Text="Ready." />
+    </Grid>
+
+</ContentPage>

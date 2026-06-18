@@ -1,0 +1,11 @@
+<Solution>
+  <Folder Name="/samples/">
+    <Project Path="samples/Txt2KML.Sample/Txt2KML.Sample.csproj" />
+  </Folder>
+  <Folder Name="/src/">
+    <Project Path="src/Plugin.Txt2KML/Plugin.Txt2KML.csproj" />
+  </Folder>
+  <Folder Name="/tests/">
+    <Project Path="tests/Plugin.Txt2KML.Tests/Plugin.Txt2KML.Tests.csproj" />
+  </Folder>
+</Solution>

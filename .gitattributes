@@ -1,0 +1,20 @@
+# Normalize line endings on commit; check out native on each platform.
+* text=auto
+
+# Explicitly text
+*.cs        text diff=csharp
+*.csproj    text
+*.slnx      text
+*.xaml      text
+*.json      text
+*.xml       text
+*.plist     text
+*.manifest  text
+*.appxmanifest text
+*.md        text
+
+# Binary assets
+*.png       binary
+*.ttf       binary
+*.ico       binary
+*.svg       binary
