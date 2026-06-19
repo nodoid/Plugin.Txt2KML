@@ -108,6 +108,44 @@ public static class Txt2Kml
     }
 
     /// <summary>
+    /// Asynchronously parses delimited text into a list of <see cref="Waypoint"/>s.
+    /// The work runs on a background thread so large inputs don't block the caller.
+    /// </summary>
+    /// <exception cref="Txt2KmlFormatException">A non-comment line is malformed.</exception>
+    public static Task<IReadOnlyList<Waypoint>> ParseAsync(string? text, CancellationToken cancellationToken = default)
+        => Task.Run(() => Parse(text), cancellationToken);
+
+    /// <summary>
+    /// Asynchronously parses delimited text and returns a complete KML document.
+    /// </summary>
+    /// <exception cref="Txt2KmlFormatException">A non-comment line is malformed.</exception>
+    public static Task<string> ConvertAsync(string? text, string? documentName = null, CancellationToken cancellationToken = default)
+        => Task.Run(() => Convert(text, documentName), cancellationToken);
+
+    /// <summary>
+    /// Asynchronously builds a complete KML document from a set of waypoints.
+    /// </summary>
+    public static Task<string> ToKmlAsync(IEnumerable<Waypoint> waypoints, string? documentName = null, CancellationToken cancellationToken = default)
+        => Task.Run(() => ToKml(waypoints, documentName), cancellationToken);
+
+    /// <summary>
+    /// Asynchronously converts delimited text to KML without throwing on malformed input.
+    /// </summary>
+    /// <returns>
+    /// A tuple where <c>Success</c> indicates whether conversion succeeded; on success
+    /// <c>Kml</c> is set, otherwise <c>Error</c> describes the failure.
+    /// </returns>
+    public static Task<(bool Success, string? Kml, Txt2KmlFormatException? Error)> TryConvertAsync(
+        string? text,
+        string? documentName = null,
+        CancellationToken cancellationToken = default)
+        => Task.Run(() =>
+        {
+            var success = TryConvert(text, out var kml, out var error, documentName);
+            return (success, kml, error);
+        }, cancellationToken);
+
+    /// <summary>
     /// Builds a complete KML document from a set of waypoints.
     /// </summary>
     public static string ToKml(IEnumerable<Waypoint> waypoints, string? documentName = null)

@@ -15,6 +15,13 @@
 		     dependency-free class library. -->
 		<UseMaui Condition="'$(TargetFramework)' != 'net10.0'">true</UseMaui>
 		<SingleProject>true</SingleProject>
+
+		<!-- On Windows, match the sample app's MAUI version (it uses CommunityToolkit.Maui,
+		     which needs >= 10.0.60). A single shared Microsoft.Maui.Controls version avoids
+		     duplicate WindowsAppSDK PRI resources when the sample references this project.
+		     On macOS the workload-default version is kept so the Windows target still
+		     cross-builds (newer Controls would invoke the Windows-only MakePri tooling). -->
+		<MauiVersion Condition="$([MSBuild]::IsOSPlatform('windows'))">10.0.60</MauiVersion>
 		<ImplicitUsings>enable</ImplicitUsings>
 		<Nullable>enable</Nullable>
 

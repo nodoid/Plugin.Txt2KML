@@ -10,12 +10,14 @@ public sealed class Txt2KmlFormatException : FormatException
     /// <summary>The 1-based line number that failed to parse, or 0 if not line-specific.</summary>
     public int LineNumber { get; }
 
+    /// <summary>Creates the exception for the given 1-based line number and message.</summary>
     public Txt2KmlFormatException(int lineNumber, string message)
         : base(message)
     {
         LineNumber = lineNumber;
     }
 
+    /// <summary>Creates the exception for the given 1-based line number, message, and inner exception.</summary>
     public Txt2KmlFormatException(int lineNumber, string message, Exception innerException)
         : base(message, innerException)
     {
